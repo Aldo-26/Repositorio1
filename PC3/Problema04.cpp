@@ -1,56 +1,72 @@
-#include<iostream>
+#include <iostream>
+
 using namespace std;
 
-int guardarDIrecciones(char* texto, char** indice){
-
-    int i=0;
+int construir_indice(char* texto, char** indice) {
+    int n = 0;
     char* p = texto;
+    bool enPalabra = false;
 
-    while(*p != '\0'){
-        int j = 0;
-
-        if((p == texto && *p != ' ') || (*(p-1) == ' ' && *p != ' ')){
-            *(indice + i) = p;
-            *(*(indice + i) + j) = j;
-            j++;
-            i++;
+    while (*p != '\0') {
+        if (*p != ' ') {
+            if (!enPalabra) {
+                *(indice + n) = p; 
+                n++;
+                enPalabra = true;
+            }
+        } else {
+            enPalabra = false;
         }
         p++;
-        j++;
     }
-    return i;
+    return n;
 }
 
-int comparar(const char * a, const char * b){
-
-    int i=0;
-    while((*a != ' ') && (*a != '\0') && (*b != ' ') && (*b != '\0')){
-        if(*(a+i) == *(b+i)){
-            
-        }
+int comparar(const char* a, const char* b) {
+    while (*a != '\0' && *a != ' ' && *b != '\0' && *b != ' ' && *a == *b) {
+        a++;
+        b++;
     }
-
+    int v1 = *a;
+    int v2 = *b;
+    if (v1 == ' ') v1 = 0;
+    if (v2 == ' ') v2 = 0;
+    return v1 - v2;
 }
 
-void ordenarIndice(char ** indice, int n){
-
-    for(int i=0; i<n; i++){
-        for(int j=0; j<n; j++){
-            if(comparar() > 0){
-                swap();
+void ordenar_indice(char** indice, int n) {
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (comparar(*(indice + j), *(indice + j + 1)) > 0) {
+                char* temp = *(indice + j);
+                *(indice + j) = *(indice + j + 1);
+                *(indice + j + 1) = temp;
             }
         }
     }
 }
-void imprimir(char* texto, char** indice, int n);
 
-int main(){
+void imprimir_indice(char* texto, char** indice, int n) {
+    for (int i = 0; i < n; i++) {
+        char* p = *(indice + i);
+        
+        char* aux = p;
+        while (*aux != '\0' && *aux != ' ') {
+            cout << *aux;
+            aux++;
+        }
 
-    char texto[] = "Los punteros no se copian se referencian y se ordenan";
-    char** Indice;
+        cout << "\t(posicion " << (int)(p - texto) << ")" << endl;
+    }
+}
 
+int main() {
+    char texto[300] = "los punteros no se copian se referencian y se ordenan";
+    char* indice[60];
 
+    int n = construir_indice(texto, indice);
+    ordenar_indice(indice, n);
+    imprimir_indice(texto, indice, n);
 
-
-
+    return 0;
 }
