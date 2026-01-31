@@ -10,9 +10,10 @@ int separar_palabras(char* texto, char* palabras[]) {
     while (*p != '\0') {
         // Detecta inicio de palabra
         if ((p == texto && *p != ' ') || (*(p - 1) == ' ' && *p != ' ')) {
-            palabras[i++] = p;
+            *(palabras + i) = p;
+            i++;
         }
-        // Reemplaza espacios por '\0' para separar palabras
+        // Reemplaza espacios por '\0' para delimitar palabras
         if (*p == ' ') {
             *p = '\0';
         }
@@ -23,14 +24,20 @@ int separar_palabras(char* texto, char* palabras[]) {
 
 void imprimir(char* palabras[], int n) {
     for (int i = 0; i < n; i++) {
-        cout << palabras[i] << endl;
+        char* p = *(palabras + i);
+        while (*p != '\0') {
+            cout << *p;
+            p++;
+        }
+        cout << endl;
     }
 }
 
 int contar(char* palabras[], int n) {
     int cont = 0;
     for (int i = 0; i < n; i++) {
-        char c = palabras[i][0];
+        char* p = *(palabras + i);
+        char c = *p; // primera letra
         if (c == 'A' || c == 'a' || c == 'E' || c == 'e' ||
             c == 'I' || c == 'i' || c == 'O' || c == 'o' ||
             c == 'U' || c == 'u') {
