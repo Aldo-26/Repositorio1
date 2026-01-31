@@ -1,59 +1,55 @@
-#include<iostream>
-#include<cstring>
+#include <iostream>
+#include <cstring>
 
-using namespace std; 
+using namespace std;
 
-int separar_palabras(char* texto, char* palabras[]){
-
+int separar_palabras(char* texto, char* palabras[]) {
     int i = 0;
     char* p = texto;
 
-    while(*texto != '\0'){
-        if((p == texto && *p != ' ') || (*(p-1) == ' ' && *p != ' ')){
-            *(palabras + i) = p;
-            i++;
+    while (*p != '\0') {
+        // Detecta inicio de palabra
+        if ((p == texto && *p != ' ') || (*(p - 1) == ' ' && *p != ' ')) {
+            palabras[i++] = p;
+        }
+        // Reemplaza espacios por '\0' para separar palabras
+        if (*p == ' ') {
+            *p = '\0';
         }
         p++;
     }
-
     return i;
 }
 
-void imprimir(char *palabra, int n){
-    
-    for(int i=0; i<n; i++){
-        cout<<*(palabra + i);
-
-        while(*palabra != '0'){
-            palabra++;
-        }
+void imprimir(char* palabras[], int n) {
+    for (int i = 0; i < n; i++) {
+        cout << palabras[i] << endl;
     }
 }
 
-int contar(char* palabra[], int n){
-
+int contar(char* palabras[], int n) {
     int cont = 0;
-    char **p = palabra;
-
-    for(int i=0; i<n; i++){
-
-        if(**p== 'A' || **p == 'a' || **p == 'E' || **p == 'e' || **p == 'I' || **p == 'i' || **p == 'O' || **p == 'o' || **p == 'U' || **p == 'u'){
+    for (int i = 0; i < n; i++) {
+        char c = palabras[i][0];
+        if (c == 'A' || c == 'a' || c == 'E' || c == 'e' ||
+            c == 'I' || c == 'i' || c == 'O' || c == 'o' ||
+            c == 'U' || c == 'u') {
             cont++;
         }
-        p++;
     }
     return cont;
 }
 
-int main(){
-
+int main() {
     char texto[] = "Este es un  ejemplo en c++   END";
-    char* palabras[10];
+    char* palabras[20];
 
-    int n = separar_palabras(texto, palabras); 
-    
-    imprimir(texto,n);
+    int n = separar_palabras(texto, palabras);
 
-    cout<<contar(palabras, n);
+    cout << "Palabras encontradas:" << endl;
+    imprimir(palabras, n);
 
+    cout << "Palabras que empiezan con vocal: " << contar(palabras, n) << endl;
+
+    return 0;
 }
